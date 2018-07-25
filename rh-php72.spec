@@ -14,7 +14,7 @@
 Summary:       Package that installs PHP 7.2
 Name:          %scl_name
 Version:       1
-Release:       1%{?dist}
+Release:       2%{?dist}
 Group:         Development/Languages
 License:       GPLv2+
 
@@ -132,6 +132,11 @@ install -d -m 755 %{buildroot}%{_datadir}/licenses
 install -d -m 755 %{buildroot}%{_datadir}/doc/pecl
 install -d -m 755 %{buildroot}%{_datadir}/tests/pecl
 install -d -m 755 %{buildroot}%{_scl_root}/var/lib/pear/pkgxml
+# Woraround scl-utils bug #1487085
+%ifarch ppc64le aarch64
+install -d -m 755 %{buildroot}%{_scl_root}/usr/lib64
+ln -s  usr/lib64  %{buildroot}%{_scl_root}/lib64
+%endif
 
 %scl_install
 
@@ -180,6 +185,10 @@ restorecon -R %{_localstatedir} &>/dev/null || :
 %{?_licensedir:%{_datadir}/licenses}
 %{_datadir}/tests
 %{_scl_root}/var
+%ifarch ppc64le aarch64
+%{_scl_root}/lib64
+%{_scl_root}/usr/lib64
+%endif
 
 
 %files build
@@ -191,6 +200,9 @@ restorecon -R %{_localstatedir} &>/dev/null || :
 
 
 %changelog
+* Mon Jul 16 2018 Remi Collet <rcollet@redhat.com> 1-2
+- fix /usr/lib64 ownership on ppc64le and aarch64
+
 * Tue Jul 10 2018 Remi Collet <rcollet@redhat.com> 1-1
 - initial package for rh-php72 in RHSCL-3.2
 
