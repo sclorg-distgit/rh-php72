@@ -14,7 +14,7 @@
 Summary:       Package that installs PHP 7.2
 Name:          %scl_name
 Version:       1
-Release:       2%{?dist}
+Release:       2.bs1%{?dist}
 Group:         Development/Languages
 License:       GPLv2+
 
